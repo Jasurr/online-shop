@@ -4,14 +4,16 @@ from django.shortcuts import render, get_list_or_404
 from goods.models import Products
 
 
-def catalog(request, catalog_slug, page=1):
+def catalog(request, catalog_slug):
+
+    page = request.GET.get('page', 1)
 
     if catalog_slug == 'all':
         goods = Products.objects.all()
     else:
         goods = get_list_or_404(Products.objects.filter(category__slug=catalog_slug))
     paginator = Paginator(goods, 3)
-    current_page = paginator.page(page)
+    current_page = paginator.page(int(page))
 
     context = {
         'title': 'Home - Katalog',
